@@ -12,8 +12,13 @@ public class Main {
     public static void main(String[] args) {
 
         try{
-            //Read Data input
+            //Read Data input from console
             List<Employee> employees = readDataInput();
+
+            //Read Data input from files in resources package
+            /*
+            List<Employee> employees = readDataInputFromResources();
+            */
 
             //Read report.ReportDefinition input
             ReportDefinition reportDefinition = readReportDefinition();
@@ -30,6 +35,23 @@ public class Main {
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    private static List<Employee> readDataInputFromResources() throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        InputStream inputStream =
+                new FileInputStream(new File(Constants.DATA_PATH));
+
+        InputStream inputStreamReport =
+                new FileInputStream(new File(Constants.REPORT_DEFINITION_PATH));
+
+        TypeReference<List<Employee>> typeReference = new TypeReference<List<Employee>>() {
+        };
+
+
+        return mapper.readValue(inputStream,typeReference);
     }
 
     private static Map<Employee, Double> topPerformanceScoreMap(Map<Employee, Double> scoreMap,ReportDefinition reportDefinition) {
@@ -78,12 +100,28 @@ public class Main {
 
     private static List<Employee> readDataInput() throws IOException {
 
-        ObjectMapper mapper = new ObjectMapper();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Hello!");
+        System.out.println("Please enter a String Data path.(Example of the format: src/main/resources/Data.json)");
+        System.out.print("String Data path:");
+        String dataPath = scanner.nextLine();
+        System.out.print("Enter Report Definition path:");
+        String reportDefinitionPath = scanner.nextLine();
+
+        InputStream inputStream =
+                new FileInputStream(new File(dataPath));
+
+        InputStream inputStreamReport =
+                new FileInputStream(new File(reportDefinitionPath));
+
+                ObjectMapper mapper = new ObjectMapper();
+      /*
         InputStream inputStream =
                 new FileInputStream(new File(Constants.DATA_PATH));
 
         InputStream inputStreamReport =
                 new FileInputStream(new File(Constants.REPORT_DEFINITION_PATH));
+        */
         TypeReference<List<Employee>> typeReference = new TypeReference<List<Employee>>() {
         };
 
@@ -106,5 +144,7 @@ public class Main {
             }
         }
         pw.close();
+        System.out.println("Program finished successfully. Please check your .csv file.");
+        System.out.println("Have a nice day!");
     }
 }
